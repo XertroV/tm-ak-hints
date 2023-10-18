@@ -23,7 +23,7 @@ vec4 S_TextColor = vec4(1);
 [Setting hidden]
 vec4 S_StrokeColor = vec4(0, 0, 0, 1);
 
-[SettingsTab name="General" icon="KeyboardO"]
+[SettingsTab name="General" icon="KeyboardO" order=1]
 void Settings_RenderGeneral() {
     if (!g_initialized) return;
 
@@ -53,7 +53,7 @@ void Settings_RenderGeneral() {
 }
 
 
-[SettingsTab name='Debug' icon="Cogs"]
+[SettingsTab name="Debug Utils" icon="Cogs" order=10]
 void Settings_RenderDebug() {
     UI::AlignTextToFramePadding();
     UI::Text("Debug Utils:");

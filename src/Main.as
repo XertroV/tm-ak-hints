@@ -160,8 +160,9 @@ class RaceState {
     uint lastFlags;
 
     void CheckAkPressed(bool raceStarted) {
-        trace('>> reading AK pressed');
+        dev_trace('>> reading AK pressed');
         auto pressed = ReadAKPressed();
+        dev_trace('DONE reading AK pressed');
         if (pressed == lastFlags) return;
         if (AK::AK1 & pressed != AK::AK1 & lastFlags) OnPressAK(AK::AK1);
         else if (AK::AK2 & pressed != AK::AK2 & lastFlags) OnPressAK(AK::AK2);
@@ -170,7 +171,6 @@ class RaceState {
         else if (AK::AK5 & pressed != AK::AK5 & lastFlags) OnPressAK(AK::AK5);
         if (!raceStarted) currentAk = AK::AK5;
         lastFlags = pressed;
-        trace('DONE reading AK pressed');
     }
 
     void OnPressAK(AK ak) {
@@ -261,4 +261,13 @@ void DrawTextWithStroke(const vec2 &in pos, const string &in text, vec4 textColo
     }
     nvg::FillColor(textColor);
     nvg::Text(pos, text);
+}
+
+
+/// Dev utils
+
+void dev_trace(const string &in msg) {
+#if DEV
+    trace(msg);
+#endif
 }
