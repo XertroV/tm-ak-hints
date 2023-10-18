@@ -9,7 +9,9 @@ void Main(){
 
 void MainCoro() {
     while (true) {
+        dev_trace('main coro yielding');
         yield();
+        dev_trace('main coro check start');
         auto app = GetApp();
         // only null when exiting (if that, even)
         if (app is null) return;
@@ -193,13 +195,32 @@ class RaceState {
         currentAk = AK::AK5;
     }
 
+    float akDetectionDelta = 0.001;
+    float lastInputSteer = 0;
+    uint inputSteerSameConsecutiveFrames;
+    uint inputSteerSameConsecutiveFramesStart;
     void CheckAgainstVisSteering(float InputSteer) {
         InputSteer = Math::Abs(InputSteer);
+        auto currAkLimit = GetCurrAkLimit();
         // with controller you can steer less than the current AK
-        if (InputSteer > GetCurrAkLimit()) {
+        if (InputSteer > currAkLimit + akDetectionDelta) {
             // then we can't be in the right AK
             currentAk = InferAkFromInput(InputSteer);
+            inputSteerSameConsecutiveFrames = 0;
+        } else if (InputSteer < currAkLimit - akDetectionDelta && InputSteer > akDetectionDelta) {
+            if (Math::Abs(InputSteer - lastInputSteer) < akDetectionDelta) {
+                if (inputSteerSameConsecutiveFrames == 0) inputSteerSameConsecutiveFramesStart = Time::Now;
+                inputSteerSameConsecutiveFrames++;
+            }
+            // this should rarely, if ever, trigger for players using a controller even if they're really good. also wait at least 40ms so for FPS > 100 we don't trigger early.
+            if (inputSteerSameConsecutiveFrames >= 4 && (Time::Now - inputSteerSameConsecutiveFramesStart) >= 40) {
+                currentAk = InferAkFromInput(InputSteer, true);
+                inputSteerSameConsecutiveFrames = 0;
+            }
+        } else {
+            inputSteerSameConsecutiveFrames = 0;
         }
+        lastInputSteer = InputSteer;
     }
 
     float GetCurrAkLimit() {
@@ -210,11 +231,11 @@ class RaceState {
         return 1.0;
     }
 
-    AK InferAkFromInput(float input) {
-        if (input <= 0.2001) return AK::AK1;
-        if (input <= 0.4001) return AK::AK2;
-        if (input <= 0.6001) return AK::AK3;
-        if (input <= 0.8001) return AK::AK4;
+    AK InferAkFromInput(float input, bool strict = false) {
+        if ((!strict || input >= 0.2 - akDetectionDelta) && input <= 0.2 + akDetectionDelta) return AK::AK1;
+        if ((!strict || input >= 0.4 - akDetectionDelta) && input <= 0.4 + akDetectionDelta) return AK::AK2;
+        if ((!strict || input >= 0.6 - akDetectionDelta) && input <= 0.6 + akDetectionDelta) return AK::AK3;
+        if ((!strict || input >= 0.8 - akDetectionDelta) && input <= 0.8 + akDetectionDelta) return AK::AK4;
         return AK::AK5;
     }
 }
