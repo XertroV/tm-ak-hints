@@ -195,7 +195,7 @@ class RaceState {
         currentAk = AK::AK5;
     }
 
-    float akDetectionDelta = 0.001;
+    float akDetectionDelta = 0.0001;
     float lastInputSteer = 0;
     uint inputSteerSameConsecutiveFrames;
     uint inputSteerSameConsecutiveFramesStart;
