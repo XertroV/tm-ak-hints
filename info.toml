@@ -1,0 +1,10 @@
+[meta]
+name     = "AK Hints"
+author   = "XertroV"
+category = "Race"
+version  = "0.1.0"
+
+[script]
+#__DEFINES__
+dependencies = ["VehicleState"]
+# dependencies = ["MLHook", "MLFeedRaceData"]
