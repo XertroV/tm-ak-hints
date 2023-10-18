@@ -1,7 +1,7 @@
 void Main(){
     @currentState = RaceState();
     WaitForSafeGameVersion();
-    startnew(MainCoro).WithRunContext(Meta::RunContext::AfterScripts);
+    startnew(MainCoro).WithRunContext(Meta::RunContext::BeforeScripts);
     yield();
     g_initialized = true;
 }
