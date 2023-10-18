@@ -12,9 +12,9 @@ void MainCoro() {
         yield();
         auto app = GetApp();
         // only null when exiting (if that, even)
-        if (app is null || app.GameScene is null) return;
+        if (app is null) return;
         auto cp = cast<CSmArenaClient>(app.CurrentPlayground);
-        if (cp is null || cp.ArenaInterface is null) continue;
+        if (cp is null || cp.ArenaInterface is null || app.GameScene is null) continue;
         if (cp.GameTerminals.Length == 0) continue;
         auto gt = cp.GameTerminals[0];
         auto player = cast<CSmPlayer>(gt.ControlledPlayer);
