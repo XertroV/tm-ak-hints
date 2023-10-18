@@ -27,7 +27,8 @@ vec4 S_StrokeColor = vec4(0, 0, 0, 1);
 void Settings_RenderGeneral() {
     if (!g_initialized) return;
 
-    UI::PushItemWidth(UI::GetWindowContentRegionWidth() * .5);
+    auto fullWidth = UI::GetWindowContentRegionWidth();
+    UI::PushItemWidth(Math::Max(fullWidth * .5, 300.));
 
     S_ScreenPosX = Math::Clamp(UI::InputFloat("Position (X, Relative)", S_ScreenPosX, 0.0f), 0.0, 1.0);
     S_ScreenPosY = Math::Clamp(UI::InputFloat("Position (Y, Relative)", S_ScreenPosY, 0.0f), 0.0, 1.0);

@@ -1,17 +1,31 @@
 void Main(){
     @currentState = RaceState();
-    startnew(MainCoro);//.WithRunContext(Meta::RunContext::AfterScripts);
+    WaitForSafeGameVersion();
+    startnew(MainCoro).WithRunContext(Meta::RunContext::AfterScripts);
     yield();
     g_initialized = true;
 }
+
+/// Global vars to track player state
+
+bool g_initialized;
+uint g_LastUpdate;
+int g_pgNow;
+uint g_LRLI;
+uint g_SRLI;
+uint g_RR;
+uint g_SI;
+int g_StartTime;
+int g_LastSeq;
+int g_RespawnRegainControl;
 
 /// Watch for when we are racing and update the player's state; reset on various conditions
 
 void MainCoro() {
     while (true) {
-        dev_trace('main coro yielding');
+        // dev_trace('main coro yielding');
         yield();
-        dev_trace('main coro check start');
+        // dev_trace('main coro check start');
         auto app = GetApp();
         // only null when exiting (if that, even)
         if (app is null) return;
@@ -139,18 +153,6 @@ void Render() {
     UI::End();
 }
 
-/// Global vars to track player state
-
-bool g_initialized;
-uint g_LastUpdate;
-uint g_pgNow;
-uint g_LRLI;
-uint g_SRLI;
-uint g_RR;
-uint g_SI;
-int g_StartTime;
-int g_LastSeq;
-int g_RespawnRegainControl;
 
 /// Track AK state
 
@@ -163,9 +165,9 @@ class RaceState {
     uint lastFlags;
 
     void CheckAkPressed(bool raceStarted) {
-        dev_trace('>> reading AK pressed');
+        // dev_trace('>> reading AK pressed');
         auto pressed = ReadAKPressed();
-        dev_trace('DONE reading AK pressed');
+        // dev_trace('DONE reading AK pressed');
         if (pressed == lastFlags) return;
         if (AK::AK1 & pressed != AK::AK1 & lastFlags) OnPressAK(AK::AK1);
         else if (AK::AK2 & pressed != AK::AK2 & lastFlags) OnPressAK(AK::AK2);
@@ -254,6 +256,30 @@ uint16 ReadAKPressed() {
 	auto cp = cast<CSmArenaClient>(GetApp().CurrentPlayground);
 	if (cp is null || cp.ArenaInterface is null) return 0; // throw('Check that CurrentPlayground and ArenaInterface are not null before calling.');
 	return Dev::GetOffsetUint16(cp.ArenaInterface, OFFSET_ARENA_INTERFACE_AK_PRESSED);
+}
+
+
+/// Notification helpers
+
+
+void Notify(const string &in msg) {
+    UI::ShowNotification(Meta::ExecutingPlugin().Name, msg);
+    trace("Notified: " + msg);
+}
+
+void NotifySuccess(const string &in msg) {
+    UI::ShowNotification(Meta::ExecutingPlugin().Name, msg, vec4(.4, .7, .1, .3), 12000);
+    trace("Notified: " + msg);
+}
+
+void NotifyError(const string &in msg) {
+    warn(msg);
+    UI::ShowNotification(Meta::ExecutingPlugin().Name + ": Error", msg, vec4(.9, .3, .1, .3), 12000);
+}
+
+void NotifyWarning(const string &in msg) {
+    warn(msg);
+    UI::ShowNotification(Meta::ExecutingPlugin().Name + ": Warning", msg, vec4(.7, .4, .1, .3), 12000);
 }
 
 
