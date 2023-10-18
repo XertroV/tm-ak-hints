@@ -216,7 +216,11 @@ class RaceState {
             }
             // this should rarely, if ever, trigger for players using a controller even if they're really good. also wait at least 40ms so for FPS > 100 we don't trigger early.
             if (inputSteerSameConsecutiveFrames >= 4 && (Time::Now - inputSteerSameConsecutiveFramesStart) >= 40) {
-                currentAk = InferAkFromInput(InputSteer, true);
+                auto inferred = InferAkFromInput(InputSteer, true);
+                // we can never be in AK5 since this branch is for steering less than the detected limit
+                if (inferred != AK::AK5) {
+                    currentAk = inferred;
+                }
                 inputSteerSameConsecutiveFrames = 0;
             }
         } else {
