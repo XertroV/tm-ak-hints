@@ -74,8 +74,20 @@ void OnRespawnCoro() {
     }
 }
 
+bool showDebugWindow = true;
+
 void Render() {
-    if (UI::Begin("debug ak window", UI::WindowFlags::AlwaysAutoResize)) {
+    if (GetApp().CurrentPlayground !is null && currentState !is null && currentState.currentAk != AK::AK5) {
+        auto pos = vec2(Draw::GetWidth(), Draw::GetHeight()) * vec2(.35, .8);
+        nvgCircleScreenPos(pos);
+        nvg::TextAlign(nvg::Align::Center | nvg::Align::Middle);
+        nvg::FontSize(35);
+        DrawTextWithStroke(pos + vec2(0, 2), tostring(currentState.currentAk).SubStr(2), vec4(1), 2);
+    }
+
+    if (!showDebugWindow) return;
+
+    if (UI::Begin("debug ak window", showDebugWindow, UI::WindowFlags::AlwaysAutoResize)) {
         UI::Text("g_LastUpdate: " + g_LastUpdate);
         UI::Text("g_LastSeq: " + g_LastSeq);
         UI::Text("g_LRLI: " + g_LRLI);
@@ -86,14 +98,6 @@ void Render() {
         UI::Text("lastFlags: " + Text::Format("0x%04x", currentState.lastFlags));
     }
     UI::End();
-
-    if (currentState !is null && currentState.currentAk != AK::AK5) {
-        auto pos = vec2(Draw::GetWidth(), Draw::GetHeight()) * vec2(.35, .8);
-        nvgCircleScreenPos(pos);
-        nvg::TextAlign(nvg::Align::Center | nvg::Align::Middle);
-        nvg::FontSize(35);
-        DrawTextWithStroke(pos + vec2(0, 2), tostring(currentState.currentAk).SubStr(2), vec4(1), 2);
-    }
 }
 
 uint g_LastUpdate;
