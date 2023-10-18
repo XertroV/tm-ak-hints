@@ -46,8 +46,9 @@ void MainCoro() {
         g_SI = player.SpawnIndex;
         if (g_RR != player.Score.NbRespawnsRequested) {
             g_RR = player.Score.NbRespawnsRequested;
-            // one second delay on respawn
-            g_RespawnRegainControl = g_pgNow + 995;
+            // one second delay on respawn, but only if we haven't already respawned
+            if (g_RespawnRegainControl < g_pgNow)
+                g_RespawnRegainControl = g_pgNow + 995;
             startnew(OnRespawnCoro);
         }
         g_RR = player.Score.NbRespawnsRequested;
