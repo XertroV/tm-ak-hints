@@ -3,9 +3,10 @@ name     = "AK Hints"
 author   = "XertroV"
 category = "Race"
 version  = "0.1.2"
+siteid   = 449
 
 [script]
 #__DEFINES__
 dependencies = ["VehicleState"]
-exports = ["Exports.as"]
-# module_name = "AkHints"
+exports = ["Ak_Exports.as"]
+module = "AkHints"
