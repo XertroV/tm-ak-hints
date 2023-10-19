@@ -7,4 +7,5 @@ version  = "0.1.2"
 [script]
 #__DEFINES__
 dependencies = ["VehicleState"]
-# dependencies = ["MLHook", "MLFeedRaceData"]
+exports = ["Exports.as"]
+# module_name = "AkHints"
