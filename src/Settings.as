@@ -61,13 +61,11 @@ void Settings_RenderDebug() {
 
     showDebugWindow = UI::Checkbox("Show debug window", showDebugWindow);
 
-//#if DEV
     if (UI::Button("Set AK1")) currentState.currentAk = AK::AK1;
     if (UI::Button("Set AK2")) currentState.currentAk = AK::AK2;
     if (UI::Button("Set AK3")) currentState.currentAk = AK::AK3;
     if (UI::Button("Set AK4")) currentState.currentAk = AK::AK4;
     if (UI::Button("Set AK5")) currentState.currentAk = AK::AK5;
-// #endif
 }
 
 
