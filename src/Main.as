@@ -121,7 +121,7 @@ void OnRespawnCoro() {
 
 /// Main rendering logic
 
-#if DEV
+#if falseDEV
 bool showDebugWindow = true;
 #else
 bool showDebugWindow = false;
@@ -156,7 +156,8 @@ void Render() {
 
 /// Track AK state
 
-enum AK { AK1 = 0x40, AK2 = 0x80, AK3 = 0x100, AK4 = 0x200, AK5 = 0x400 }
+// Flags moved 1 bit along in 2023-11-21 update (0x40 became 0x80, etc)
+enum AK { AK1 = 0x80, AK2 = 0x100, AK3 = 0x200, AK4 = 0x400, AK5 = 0x800 }
 
 class RaceState {
     AK lastCpAk = AK::AK5;
@@ -255,7 +256,8 @@ RaceState@ currentState;
 
 const uint16 OFFSET_ARENA_INTERFACE_AK_PRESSED = 0x10b0;
 
-// Flags: 0x40 -> ak1, 0x80 -> ak2, 0x100 -> ak3, 0x200 -> ak4, 0x400 -> ak5
+// Flags moved 1 bit along in 2023-11-21 update (0x40 became 0x80, etc)
+// Flags: 0x80 -> ak1, 0x100 -> ak2, 0x200 -> ak3, 0x400 -> ak4, 0x800 -> ak5
 uint16 ReadAKPressed() {
 	auto cp = cast<CSmArenaClient>(GetApp().CurrentPlayground);
 	if (cp is null || cp.ArenaInterface is null) return 0; // throw('Check that CurrentPlayground and ArenaInterface are not null before calling.');
