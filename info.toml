@@ -2,7 +2,7 @@
 name     = "AK Hints"
 author   = "XertroV"
 category = "Race"
-version  = "0.1.4"
+version  = "0.1.5"
 siteid   = 449
 
 [script]
