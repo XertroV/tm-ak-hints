@@ -129,7 +129,10 @@ bool showDebugWindow = false;
 
 void Render() {
     if (!g_initialized) return;
-    bool shouldShowAK = GetApp().CurrentPlayground !is null && currentState !is null && currentState.currentAk != AK::AK5;
+    bool shouldShowAK = !S_DependencyOnlyMode
+        && GetApp().CurrentPlayground !is null
+        && currentState !is null
+        && currentState.currentAk != AK::AK5;
     if (S_Preview || shouldShowAK) {
         auto pos = vec2(Draw::GetWidth(), Draw::GetHeight()) * vec2(S_ScreenPosX, S_ScreenPosY);
         nvgCircleScreenPos(pos, GetAkBgColor(currentState.currentAk), S_SizeRadius);

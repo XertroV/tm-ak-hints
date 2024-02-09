@@ -23,7 +23,7 @@ vec4 S_TextColor = vec4(1);
 [Setting hidden]
 vec4 S_StrokeColor = vec4(0, 0, 0, 1);
 
-[SettingsTab name="General" icon="KeyboardO" order=1]
+[SettingsTab name="General" icon="KeyboardO" order="1"]
 void Settings_RenderGeneral() {
     if (!g_initialized) return;
 
@@ -34,6 +34,10 @@ void Settings_RenderGeneral() {
     S_ScreenPosY = Math::Clamp(UI::InputFloat("Position (Y, Relative)", S_ScreenPosY, 0.0f), 0.0, 1.0);
     S_SizeRadius = Math::Clamp(UI::InputFloat("Size (Radius)", S_SizeRadius, 1.0f), 1.0, 200.0);
     S_Preview = UI::Checkbox("Show Preview", S_Preview);
+
+    if (S_DependencyOnlyMode) {
+        UI::TextWrapped("\\$aaaWarning: dependency-only mode active!");
+    }
 
     UI::Separator();
 
@@ -77,4 +81,16 @@ vec4 GetAkBgColor(AK ak) {
     if (ak == AK::AK4) return S_Col_AK4;
     if (ak == AK::AK5) return S_Col_AK5;
     return S_Col_AK4;
+}
+
+
+
+[Setting hidden]
+bool S_DependencyOnlyMode = false;
+
+[SettingsTab name="Dependency Only Mode" order=2]
+void Settings_RenderDependencyOnlyMode() {
+    S_DependencyOnlyMode = UI::Checkbox("Enable Dependency Only Mode (Hides Indicator)", S_DependencyOnlyMode);
+    UI::TextWrapped("About: Do not show the AK indicator, just leave this plugin to be a dependency for other plugins e.g., DID.");
+    UI::TextWrapped("If you want to disable the plugin, better to do that via the developer menu, or uninstall the plugin.");
 }
