@@ -152,6 +152,7 @@ void Render() {
         UI::Text("resapwns: " + g_RR);
         UI::Text("currentAk: " + tostring(currentState.currentAk));
         UI::Text("lastFlags: " + Text::Format("0x%04x", currentState.lastFlags));
+
     }
     UI::End();
 }
