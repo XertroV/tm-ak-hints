@@ -99,10 +99,10 @@ void OnRespawnCoro() {
     uint count = 0, count_standing = 0, count_flying = 0;
     while (count < 8) {
         if (app is null || app.GameScene is null || app.CurrentPlayground is null) return;
-        auto playerTmp = cast<CSmPlayer>(cp.GameTerminals[0].ControlledPlayer);
-        if (playerTmp is null) return;
-        auto vis = VehicleState::GetVis(app.GameScene, playerTmp);
-        if (vis is null) return;
+        @player = cast<CSmPlayer>(cp.GameTerminals[0].ControlledPlayer);
+        if (player is null) return;
+        @vis1 = VehicleState::GetVis(app.GameScene, player);
+        if (vis1 is null) return;
         if ((vis1.AsyncState.Position - lastPos).LengthSquared() < 0.0001) {
             count_standing++;
         } else {
