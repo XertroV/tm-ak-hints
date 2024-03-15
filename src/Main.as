@@ -174,11 +174,17 @@ class RaceState {
         auto pressed = ReadAKPressed();
         // dev_trace('DONE reading AK pressed');
         if (pressed == lastFlags) return;
-        if (AK::AK1 & pressed != AK::AK1 & lastFlags) OnPressAK(AK::AK1);
-        else if (AK::AK2 & pressed != AK::AK2 & lastFlags) OnPressAK(AK::AK2);
-        else if (AK::AK3 & pressed != AK::AK3 & lastFlags) OnPressAK(AK::AK3);
-        else if (AK::AK4 & pressed != AK::AK4 & lastFlags) OnPressAK(AK::AK4);
-        else if (AK::AK5 & pressed != AK::AK5 & lastFlags) OnPressAK(AK::AK5);
+
+        if (AK::AK5 & pressed == AK::AK5) {
+            currentAk = AK::AK5;
+        } else {
+            if (pressed == lastFlags) return;
+            if (AK::AK1 & pressed != AK::AK1 & lastFlags) OnPressAK(AK::AK1);
+            else if (AK::AK2 & pressed != AK::AK2 & lastFlags) OnPressAK(AK::AK2);
+            else if (AK::AK3 & pressed != AK::AK3 & lastFlags) OnPressAK(AK::AK3);
+            else if (AK::AK4 & pressed != AK::AK4 & lastFlags) OnPressAK(AK::AK4);
+        }
+        
         if (!raceStarted) currentAk = AK::AK5;
         lastFlags = pressed;
     }
