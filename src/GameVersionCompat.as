@@ -1,6 +1,7 @@
 bool GameVersionSafe = false;
 bool KnownSafe = false;
 const string[] KnownSafeVersions = {
+    "2024-03-19_14_47",
     "2024-02-26_11_36",
     "2024-01-10_12_53",
     "2023-12-21_23_50",
@@ -42,9 +43,10 @@ void EnsureGameVersionCompatibility() {
 }
 
 void WarnBadGameVersion() {
-    NotifyWarning("Game version ("+TmGameVersion+") not marked as compatible with this version of the plugin -- will be inactive!\n\nChecking new versions is a manual process and avoids crashing your game after an update.\n(Override in settings)");
+    warn("Game version ("+TmGameVersion+") not marked as compatible with this version of the plugin ("+ThisPluginVersion+") -- bugs might occur.");
 }
 
+string ThisPluginVersion;
 bool requestStarted = true;
 bool requestEnded = true;
 
@@ -62,10 +64,10 @@ bool GetStatusFromOpenplanet() {
     requestEnded = true;
     try {
         auto j = Json::Parse(req.String());
-        auto myVer = Meta::ExecutingPlugin().Version;
-        if (!j.HasKey(myVer) || j[myVer].GetType() != Json::Type::Object) return false;
+        ThisPluginVersion = Meta::ExecutingPlugin().Version;
+        if (!j.HasKey(ThisPluginVersion) || j[ThisPluginVersion].GetType() != Json::Type::Object) return false;
         // if we have this key, then it's okay
-        return j[myVer].HasKey(TmGameVersion);
+        return j[ThisPluginVersion].HasKey(TmGameVersion);
     } catch {
         warn("exception: " + getExceptionInfo());
         return RetryGetStatus(2000);

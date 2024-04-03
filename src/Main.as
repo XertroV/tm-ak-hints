@@ -1,6 +1,9 @@
 void Main(){
     @currentState = RaceState();
-    WaitForSafeGameVersion();
+    // WaitForSafeGameVersion();
+    // we don't really need to disable for incorrect game versions. Just warn the user that it might break.
+    // Reason: we will never crash the game. The only dev call is Dev::GetOffsetUint16
+    CheckAndSetGameVersionSafe();
     startnew(MainCoro).WithRunContext(Meta::RunContext::BeforeScripts);
     yield();
     g_initialized = true;
@@ -184,7 +187,7 @@ class RaceState {
             else if (AK::AK3 & pressed != AK::AK3 & lastFlags) OnPressAK(AK::AK3);
             else if (AK::AK4 & pressed != AK::AK4 & lastFlags) OnPressAK(AK::AK4);
         }
-        
+
         if (!raceStarted) currentAk = AK::AK5;
         lastFlags = pressed;
     }
