@@ -4,7 +4,7 @@ void Main(){
     // we don't really need to disable for incorrect game versions. Just warn the user that it might break.
     // Reason: we will never crash the game. The only dev call is Dev::GetOffsetUint16
     CheckAndSetGameVersionSafe();
-    startnew(MainCoro).WithRunContext(Meta::RunContext::BeforeScripts);
+    Meta::StartWithRunContext(Meta::RunContext::BeforeScripts, MainCoro);
     yield();
     g_initialized = true;
 }

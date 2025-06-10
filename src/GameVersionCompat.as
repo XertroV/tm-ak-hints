@@ -1,6 +1,8 @@
-bool GameVersionSafe = false;
-bool KnownSafe = false;
+// we never access stuff that would crash the game via Dev:: so skip the check. will be obvious when it breaks.
+bool GameVersionSafe = true;
+bool KnownSafe = true;
 const string[] KnownSafeVersions = {
+    "2024-04-30_16_52",
     "2024-03-19_14_47",
     "2024-02-26_11_36",
     "2024-01-10_12_53",
